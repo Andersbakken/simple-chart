@@ -8,8 +8,8 @@ const child_process = require("child_process");
 
 const width = 1928; //px
 const height = 1080; //px
-const backgroundColor = 'white'; // Uses https://www.w3schools.com/tags/canvas_fillstyle.asp
-const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColor });
+const backgroundColour = 'white'; // Uses https://www.w3schools.com/tags/canvas_fillstyle.asp
+const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour });
 
 // const numbers = fs.readFileSync("/dev/stdin", "utf8").split("\n").map(x => parseInt(x)).filter(x => !isNaN(x));
 
