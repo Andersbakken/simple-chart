@@ -49,9 +49,6 @@ for (let idx=2; idx<process.argv.length; ++idx) {
     processFile(process.argv[idx]);
 }
 
-console.log(rss, privateDirty);
-const numbers = [];
-
 let labels = rss.map((_, idx) => idx);
 while (labels.length < privateDirty.length) {
     labels.push(labels.length);
