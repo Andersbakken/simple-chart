@@ -15,6 +15,8 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColou
 
 let rss = [];
 let privateDirty = [];
+let rssTimes = [];
+let privateDirtyTimes = [];
 
 function processFile(file)
 {
@@ -28,6 +30,7 @@ function processFile(file)
                 lastRSSTime = time;
                 lastRSS = match[1];
                 rss.push(lastRSS);
+                rssTimes.push(time);
             }
         } else {
             match = /Private_Dirty: ([0-9]+)/.exec(line);
@@ -38,6 +41,7 @@ function processFile(file)
                     lastPrivateDirtyTime = time;
                     lastPrivateDirty = match[1];
                     privateDirty.push(lastPrivateDirty);
+                    privateDirtyTimes.push(time);
                 }
             }
         }
@@ -49,15 +53,14 @@ for (let idx=2; idx<process.argv.length; ++idx) {
     processFile(process.argv[idx]);
 }
 
-let labels = rss.map((_, idx) => idx);
-while (labels.length < privateDirty.length) {
-    labels.push(labels.length);
+for (let idx=rssTimes.length; idx<privateDirtyTimes.length; ++idx) {
+    rssTimes.push(privateDirtyTimes[idx]);
 }
 
 const configuration = {
     type: 'line',   // for line chart
     data: {
-        labels,
+        labels: rssTimes,
         datasets: [
             {
                 label: "RSS",
