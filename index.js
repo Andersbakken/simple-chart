@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 
-// Install libs with: npm i chartjs-node-canvas chart.js
 // Docs https://www.npmjs.com/package/chartjs-node-canvas
 // Config documentation https://www.chartjs.org/docs/latest/axes/
 const fs = require('fs');
-// const lineReader = require("line-reader");
-const nReadlines = require('n-readlines');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+const child_process = require("child_process");
 
-const width = 400; //px
-const height = 400; //px
-const backgroundColour = 'white'; // Uses https://www.w3schools.com/tags/canvas_fillstyle.asp
-const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour });
+const width = 1928; //px
+const height = 1080; //px
+const backgroundColor = 'white'; // Uses https://www.w3schools.com/tags/canvas_fillstyle.asp
+const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColor });
 
 // const numbers = fs.readFileSync("/dev/stdin", "utf8").split("\n").map(x => parseInt(x)).filter(x => !isNaN(x));
 
@@ -20,13 +18,8 @@ let privateDirty = [];
 
 function processFile(file)
 {
-    let lineNumber = 0;
-    const lines = new nReadlines(file);
-
-    console.log("Reading file", file);
     let lastRSS, lastRSSTime, lastPrivateDirty, lastPrivateDirtyTime;
-    while ((l = lines.next())) {
-        const line = l.toString("ascii");
+    const lines = child_process.execSync(`grep "Rss: [0-9]\\+\\|Private_Dirty: [0-9]\\+" ${file}`).toString().split("\n").forEach(line => {
         // console.log(`Line ${lineNumber} has: ${line.toString('ascii')}`);
         let match = /Rss: ([0-9]+)/.exec(line);
         if (match) {
@@ -48,13 +41,7 @@ function processFile(file)
                 }
             }
         }
-        if (++lineNumber % 100000 === 0) {
-            process.stdout.write(".");
-        }
-    }
-    if (lineNumber >= 100000) {
-        process.stdout.write("\n");
-    }
+    });
 }
 
 
