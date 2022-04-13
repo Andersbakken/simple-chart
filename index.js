@@ -21,9 +21,9 @@ let privateDirtyTimes = [];
 function processFile(file)
 {
     let lastRSS, lastRSSTime, lastPrivateDirty, lastPrivateDirtyTime;
-    const lines = child_process.execSync(`grep "Rss: [0-9]\\+\\|Private_Dirty: [0-9]\\+" ${file}`).toString().split("\n").forEach(line => {
-        // console.log(`Line ${lineNumber} has: ${line.toString('ascii')}`);
-        let match = /Rss: ([0-9]+)/.exec(line);
+    const lines = child_process.execSync(`grep "Rss\\"\\?: [0-9]\\+\\|Private_Dirty\\"\\?: [0-9]\\+" ${file}`).toString().split("\n").forEach(line => {
+        // console.log(`Line ${line}`);
+        let match = /Rss"?: ([0-9]+)/.exec(line);
         if (match) {
             const time = line.substring(0, 12);
             if (time !== lastRSSTime || match[1] !== lastRSS) {
@@ -33,7 +33,7 @@ function processFile(file)
                 rssTimes.push(time);
             }
         } else {
-            match = /Private_Dirty: ([0-9]+)/.exec(line);
+            match = /Private_Dirty"?: ([0-9]+)/.exec(line);
             if (match) {
                 // console.log(typeof line, line);
                 const time = line.substring(0, 12);
